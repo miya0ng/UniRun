@@ -1,38 +1,40 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
-
-public class GameManager
+public class GameManager : MonoBehaviour
 {
-    public bool IsGameOver { get ; private set; }
+    public bool IsGameOver { get; private set; }
     private int score;
-
     public TextMeshProUGUI scoreText;
     public GameObject gameOverUi;
 
     public void Awake()
     {
+        scoreText.text = "Score: " + score;
         gameOverUi.SetActive(false);
+        IsGameOver = false;
+        score = 0;
     }
-    public void Update()
+    private void Update()
     {
-        if (IsGameOver && Input.GetMouseButtonDown(0))
+        if (IsGameOver && Input.GetKeyDown(KeyCode.Escape))
         {
+            Debug.Log("Game Over! Press Escape to restart.");
+            IsGameOver = false;
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
     public void AddScore(int add)
     {
-        if(!IsGameOver)
-        {
-            score += add;
-            scoreText.text = $"Score: {score}";
-        }
+        if (IsGameOver) return;
+        score += add;
+        scoreText.text = "Score: " + score;
     }
-
-    public void OnPLayerDead()
+    public void OnPlayerDead()
     {
         IsGameOver = true;
         gameOverUi.SetActive(true);
+        Debug.Log("Player is dead. Game Over!");
     }
 }
+

@@ -7,11 +7,9 @@ public class player : MonoBehaviour
     public int jumpCountMax = 2;
     public int jumpCount = 0;
     public float timer ;
-    public int score =1;
     private Animator Animator;
     private Rigidbody2D rb;
     public GameManager gameManger;
-    public GameObject gm = null;
     private bool grounded = true;
     private bool isDead = false;
     private void Awake()
@@ -22,10 +20,7 @@ public class player : MonoBehaviour
 
     private void Start()
     {
-        if (CompareTag("GameController"))
-        {
-            gameManger = gm.GetComponent<GameManager>();
-        }
+
     }
     private void Update()
     {
@@ -35,11 +30,12 @@ public class player : MonoBehaviour
         {
             rb.AddForce(new Vector2(0, jumpforce), ForceMode2D.Impulse);
             jumpCount++;
-            if(timer==1)
-            {
-                timer = 0;
-                gameManger.AddScore(score);
-            }
+        
+        }
+        if (timer>=1f)
+        {
+            timer = 0;
+            gameManger.AddScore(1);
         }
         Animator.SetBool("Grounded", grounded);
         //Debug.Log(jumpScore);
@@ -76,6 +72,6 @@ public class player : MonoBehaviour
         rb.bodyType = RigidbodyType2D.Kinematic;
         rb.linearVelocity = Vector2.zero;
         isDead = true;
-        gameManger.OnPLayerDead();
+        gameManger.OnPlayerDead();
     }
 }
