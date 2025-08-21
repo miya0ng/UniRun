@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class player : MonoBehaviour
 {
-    private float jumpforce=10f;
+    private float jumpforce=7f;
 
     public int jumpCountMax = 2;
     public int jumpCount = 0;
@@ -12,10 +12,14 @@ public class player : MonoBehaviour
     public GameManager gameManger;
     private bool grounded = true;
     private bool isDead = false;
+    private AudioSource audioSource;
+    private AudioClip audioClip;    
     private void Awake()
     {
         Animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        audioSource = GetComponent<AudioSource>();
+        audioClip = GetComponent<AudioClip>();
     }
 
     private void Start()
@@ -30,13 +34,20 @@ public class player : MonoBehaviour
         {
             rb.AddForce(new Vector2(0, jumpforce), ForceMode2D.Impulse);
             jumpCount++;
-        
+
+            audioSource.Play();
         }
         if (timer>=1f)
         {
             timer = 0;
             gameManger.AddScore(1);
         }
+
+        if(Input.GetMouseButtonUp(0) && rb.linearVelocity.y > 0)
+        {
+            rb.linearVelocity *= 0.5f;
+        }
+
         Animator.SetBool("Grounded", grounded);
         //Debug.Log(jumpScore);
     }

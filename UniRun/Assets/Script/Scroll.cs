@@ -3,10 +3,11 @@ using UnityEngine;
 public class Scroll : MonoBehaviour
 {
     public float speed = 10f;
+    GameObject p;
 
     private void Start()
     {
-
+        p = GameObject.FindWithTag("Platform");
     }
     private void Update()
     {
@@ -19,7 +20,8 @@ public class Scroll : MonoBehaviour
         {
             if(transform.position.x < -20)
             {
-                transform.position = new Vector2(20,0);
+                p.SetActive(false);
+                //transform.position = new Vector2(20,0);
             }
             transform.Translate(Vector3.left * speed * Time.deltaTime);
         }
